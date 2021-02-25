@@ -46,7 +46,7 @@ describe('User Endpoints', function () {
       })
     })
 
-    it(`responds 400 'Password be longer than 8 characters' when empty password`, () => {
+    it(`responds 400 'Password must be longer than 8 characters' when empty password`, () => {
       const userShortPassword = {
         username: 'test username',
         password: '1234567',
@@ -55,7 +55,7 @@ describe('User Endpoints', function () {
       return supertest(app)
         .post('/api/user')
         .send(userShortPassword)
-        .expect(400, { error: `Password be longer than 8 characters` })
+        .expect(400, { error: `Password must be longer than 8 characters` })
     })
 
     it(`responds 400 'Password be less than 72 characters' when long password`, () => {
@@ -175,14 +175,16 @@ describe('User Endpoints', function () {
           name: 'French',
           total_score: 0,
           words: [
-            { original: 'entraine toi', translation: 'practice' },
-            { original: 'bonjour', translation: 'hello' },
-            { original: 'maison', translation: 'house' },
-            { original: 'développeur', translation: 'developer' },
-            { original: 'traduire', translation: 'translate' },
-            { original: 'incroyable', translation: 'amazing' },
-            { original: 'chien', translation: 'dog' },
-            { original: 'chat', translation: 'cat' },
+            { original: 'nuages', translation: 'clouds' },
+            { original: 'brume', translation: 'mist' },
+            { original: 'au bord', translation: 'by' },
+            { original: 'chaque', translation: 'every' },
+            { original: 'doux', translation: 'soft' },
+            { original: 'épatant', translation: 'amazing' },
+            { original: 'vouloir', translation: 'to want' },
+            { original: 'alors', translation: 'while' },
+            { original: 'chanceux', translation: 'lucky' },
+            { original: 'bâtir', translation: 'build' }
           ]
         }
         return supertest(app)
