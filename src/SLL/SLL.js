@@ -1,166 +1,237 @@
-class Node {
-  constructor(val) {
-    this.val = val;
-    this.next = null;
-  }
+class _Node {
+    constructor(value, next) {
+        this.value = value,
+            this.next = next;
+    }
 }
 
 class SLL {
-  constructor() {
-    this.head = null;
-    this.tail = null;
-    this.length = 0;
-  }
-  push(val) {
-    let newNode = new Node(val)
-    if (this.head === null) {
-      this.head = newNode;
-      this.tail = this.head;
-    } else {
-      this.tail.next = newNode;
-      this.tail = newNode;
+    constructor() {
+        this.head = null;
     }
-    this.length++;
-    return this;
-  }
-  pop() {
-    if (this.head == null) return null
-    if (this.head === this.tail) {
-      this.head = null;
-      this.tail = null;
-      this.length--
+
+    insertFirst(item) {
+        this.head = new _Node(item, this.head);
     }
-    else {
-      let current = this.head
-      let newTail = current
-      while (current.next !== null) {
-        newTail = current
-        current = current.next
-      }
-      this.tail = newTail
-      this.tail.next = null;
-      this.length--;
-      return current;
+    all() {
+        let res = []
+        let current = this.head
+        while (current) {
+            res.push(current.value)
+            current = current.next
+        }
+        return res
     }
-  }
-  shift() {
-    if (this.head == null) return undefined;
-    if (this.head === this.tail) {
-      this.head = null;
-      this.tail = null;
-      this.length--;
-    } else {
-      let oldHead = this.head
-      this.head = oldHead.next;
-      this.length--;
-      return oldHead
+
+    insertLast(item) {
+        if (this.head === null) {
+            this.insertFirst(item);
+        }
+        else {
+            let tempNode = this.head;
+            while (tempNode.next !== null) {
+                tempNode = tempNode.next;
+            }
+            tempNode.next = new _Node(item, null);
+        }
+    }
+    /**Inserts a new node after a node containing the key.*/
+    insertAfter(key, itemToInsert) {
+        let tempNode = this.head;
+        while (tempNode !== null && tempNode.value !== key) {
+            tempNode = tempNode.next;
+        }
+        if (tempNode !== null) {
+            tempNode.next = new _Node(itemToInsert, tempNode.next);
+        }
+    }
+    /* Inserts a new node before a node containing the key.*/
+    insertBefore(key, itemToInsert) {
+        if (this.head == null) {
+            return;
+        }
+        if (this.head.value == key) {
+            this.insertFirst(itemToInsert);
+            return;
+        }
+        let prevNode = null;
+        let currNode = this.head;
+        while (currNode !== null && currNode.value !== key) {
+            prevNode = currNode;
+            currNode = currNode.next;
+        }
+        if (currNode === null) {
+            console.log('Node not found to insert');
+            return;
+        }
+        //insert between current and previous
+        prevNode.next = new _Node(itemToInsert, currNode);
+    }
+    insertAt(nthPosition, itemToInsert) {
+        if (nthPosition < 0) {
+            throw new Error('Position error');
+        }
+        if (nthPosition === 0) {
+            this.insertFirst(itemToInsert);
+        } else {
+            // Find the node which we want to insert after
+            const node = this._findNthElement(nthPosition - 1);
+            const newNode = new _Node(itemToInsert, null);
+            newNode.next = node.next;
+            node.next = newNode;
+        }
+    }
+    _findNthElement(position) {
+        let node = this.head;
+        for (let i = 0; i < position; i++) {
+            node = node.next;
+        }
+        return node;
+    }
+    remove(item) {
+        //if the list is empty
+        if (!this.head) {
+            return null;
+        }
+        //if the node to be removed is head, make the next node head
+        if (this.head.value === item) {
+            this.head = this.head.next;
+            return;
+        }
+        //start at the head
+        let currNode = this.head;
+        //keep track of previous
+        let previousNode = this.head;
+        while ((currNode !== null) && (currNode.value !== item)) {
+            //save the previous node 
+            previousNode = currNode;
+            currNode = currNode.next;
+        }
+        if (currNode === null) {
+            console.log('Item not found');
+            return;
+        }
+        previousNode.next = currNode.next;
+    }
+    find(item) { //get
+        //start at the head
+        let currNode = this.head;
+        //if the list is empty
+        if (!this.head) {
+            return null;
+        }
+        while (currNode.value !== item) {
+            //return null if end of the list 
+            // and the item is not on the list
+            if (currNode.next === null) {
+                return null;
+            }
+            else {
+                //keep looking 
+                currNode = currNode.next;
+            }
+        }
+        //found it
+        return currNode;
+    }
+    move(num) {
+        if (num >= 10) {
+            this.insertLast(this.head.value)
+            this.shift()
+            return true
+        }
+        let oldHead = this.head.value
+
+        this.insertAt(num + 2, oldHead)
+        this.shift()
+        return true
 
     }
-  }
-  unshift(val) {
-    let newNode = new Node(val)
-    if (this.head === null) {
-      this.head = newNode;
-      this.tail = newNode;
-    } else {
-      newNode.next = this.head;
-      this.head = newNode;
+    shift() {
+        if (this.head == null) return undefined;
+        let oldHead = this.head
+        this.head = oldHead.next;
+        return oldHead
     }
-    this.length++
-    return this
-  }
-  get(index) {
-    if (index < 0 || index >= this.length) return null
-    let counter = 0
-    let current = this.head
-    while (counter !== index) {
-      counter++
-      current = current.next
+    updateNext() {
+        let current = this.head;
+        while (current.next !== null) {
+            current.value.next = current.next.value.id
+            current = current.next
+        }
+        current.next === null
+        return this
     }
-    return current
-  }
-  set(index, val) {
-    let foundNode = this.get(index)
-    if (foundNode) {
-      foundNode.val = val
-      return true
-    }
-    return false
+    getNextIds() {
+        let res = []
+        let current = this.head
+        while (current) {
 
-  }
-  insert(index, val) {
-    if (index < 0 || index > this.length) return false
-    if (index === 1) return !!this.unshift(val)
-    if (index === this.length) return !!this.push(val)
-    let newNode = new Node(val)
-    let counter = 0;
-    let current = this.head
-    let temp = current;
-    while (counter !== index) {
-      temp = current;
-      current = current.next;
-      counter++;
+            if (current.next == null) {
+                res.push({ id: current.value.id, next: null })
+            } else {
+                res.push({ id: current.value.id, next: current.next.value.id })
+            }
+            current = current.next
+        }
+        return res
     }
-    newNode.next = current;
-    temp.next = newNode;
-    this.length++;
-    return true
-
-  }
-
-  remove(index) {
-    if (index < 0 || index > this.length) return undefined;
-    if (index === 0) return !!this.shift()
-    if (index === this.length - 1) return !!this.pop()
-    let current = this.head;
-    let temp = current;
-    let counter = 0
-    while (counter !== index) {
-      temp = current;
-      current = current.next
-      counter++
-    }
-    temp.next = current.next
-    this.length--;
-    return true;
-
-  }
-  all() {
-    let res = []
-    let current = this.head
-    while (current) {
-      res.push(current.val)
-      current = current.next
-    }
-    return res
-  }
-  reverse() {
-    let node = this.head
-    this.head = this.tail
-    this.tail = node
-    let next
-    let prev = null
-    while (node) {
-      next = node.next
-      node.next = prev
-      prev = node;
-      node = next
-    }
-    return this
-  }
-  move(num) {
-    if (num > this.length - 1) {
-      num = this.length - 1
-    }
-    let oldHead = this.head.val
-
-    this.insert(num + 1, oldHead)
-    return !!this.shift()
-
-
-  }
 
 }
 
- 
+function displayList(list) {
+    let currNode = list.head;
+    while (currNode !== null) {
+        console.log(currNode.value);
+        currNode = currNode.next;
+    }
+}
+
+function size(lst) {
+    let counter = 0;
+    let currNode = lst.head;
+    if (!currNode) {
+        return counter;
+    }
+    else
+        counter++;
+    while (!(currNode.next == null)) {
+        counter++;
+        currNode = currNode.next;
+    }
+    return counter;
+}
+
+function isEmpty(lst) {
+    let currNode = lst.head;
+    if (!currNode) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function findPrevious(lst, item) {
+    let currNode = lst.head;
+    while ((currNode !== null) && (currNode.next.value !== item)) {
+        currNode = currNode.next;
+    }
+    return currNode;
+}
+
+function findLast(lst) {
+    if (lst.head === null) {
+        return 'list is empty';
+    }
+    let tempNode = lst.head;
+    while (tempNode.next !== null) {
+        tempNode = tempNode.next;
+    }
+    return tempNode;
+
+
+}
+
+
 module.exports = SLL
