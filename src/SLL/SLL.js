@@ -182,7 +182,6 @@ class SLL {
 function displayList(list) {
     let currNode = list.head;
     while (currNode !== null) {
-        console.log(currNode.value);
         currNode = currNode.next;
     }
 }

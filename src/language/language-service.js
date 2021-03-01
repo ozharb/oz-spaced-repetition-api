@@ -162,12 +162,8 @@ const LanguageService = {
           LinkedWords.insertLast(node);
          node = words.find(word => word.id === node.next)
          }
-        //  LinkedWords.insertAt(1, updatedfields)
-        // console.log('UPDATED FIELDS:', updatedfields)
-        //  LinkedWords.shift()
+  
          LinkedWords.move(LinkedWords.head.value.memory_value)
-         //LinkedWords.updateNext()
-        // console.log('MEMORY_VAL:', LinkedWords.head.value.memory_value)
          return LinkedWords.getNextIds()
       }
       )
@@ -218,8 +214,6 @@ const LanguageService = {
    
   },
   updateScore(knex, id, fieldstoUpdate){
-    //  console.log('updateIDs',ids)
-
    return knex('word')
    .where({id})
    .update(fieldstoUpdate)    
@@ -227,22 +221,19 @@ const LanguageService = {
   },
 
   updateIds(knex, id, next){
-    //  console.log('updateIDs',ids)
-
    return knex('word')
    .where({id})
    .update(next)    
 
   },
   updateTotal(knex, id, total_score){
-    console.log('**************total-score:',total_score)
      return knex('language')
      .where({ id })
      .update(total_score)
     
    },
 updateHead(knex, id, head){
- console.log(head)
+
   return knex('language')
   .where({ id })
   .update({head})
@@ -251,77 +242,7 @@ updateHead(knex, id, head){
 
 
 }
-//update HEAD
-// updateAllWords(knex, newList){
-//     console.log('***NEW:',[newList])
-// knex('word').update(...newList)
-// .returning()
-// .then(res=>{
-//   console.log(res)
-// })
-
-
-// },
-// updateAllWords(knex, languageId) {
-
-
-
-    // when inserting words,
-    // we need to know the current sequence number
-    // so that we can set the `next` field of the linked language
- 
-
-    // const languageWords = [
-    //   ['au bord', 'by', 12],
-    //   ['brume', 'mist', 13],
-    //   ['nuages', 'clouds', 14], 
-    //   ['chaque', 'every', 15],
-    //   ['doux', 'soft', 16],
-    //   ['épatant', 'amazing', 17],
-    //   ['vouloir', 'to want', 18],
-    //   ['alors', 'while', 19],
-    //   ['chanceux', 'lucky', 20],
-    //   ['bâtir', 'build', null],
-    // ]
-      
-    //   knex('word')
-    //   .update(
-    //    languageWords.map(([original, translation, nextInc]) => ({
-    //       language_id: languageId,
-    //       original,
-    //       translation,
-    //       next: nextInc
-    //         ? nextInc
-    //         : null
-    //     })),
-    //   )
-    //   .returning()
-    //   .then(res=>
-    //     console.log('RES*********:', res))
-
-    // await knex('language')
-    //   .where('id', languageId)
-    //   .update({
-    //     head: languageId,
-    //   })
-
-// },
-
-// updateHead(knex, id, head){
- 
-//   return knex('language')
-//   .where({ id })
-//   .update(head)
- 
-// }
-
 
 
 
 module.exports = LanguageService
-// hasUserWithUserName(db, username) {
-//   return db('user')
-//     .where({ username })
-//     .first()
-//     .then(user => !!user)
-// },

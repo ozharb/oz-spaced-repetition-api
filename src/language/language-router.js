@@ -9,7 +9,6 @@ const languageRouter = express.Router()
 
 
 
-
 languageRouter
   .use(requireAuth)
   .use(async (req, res, next) => {
@@ -18,7 +17,6 @@ languageRouter
         req.app.get('db'),
         req.user.id,
       )
-
       if (!language)
         return res.status(404).json({
           error: `You don't have any languages`,
@@ -53,14 +51,11 @@ languageRouter
 
 languageRouter
   .get('/head', async (req, res, next) => {
-    // implement me
     try {
       const nextWord = await LanguageService.getUserWord(
         req.app.get('db'),
         req.user.id,
       )
-
-
       res.json({
         nextWord: nextWord[0].original,
         totalScore: nextWord[0].total_score,
@@ -72,8 +67,6 @@ languageRouter
       next(error)
     }
   })
-  ///populate linked list. Push list in database once then moves
-  // head back each time according to memory value.
   .get('/words', async (req, res, next) => {
 
     try {
@@ -99,7 +92,7 @@ languageRouter
 //updated total score and head in language table
 
 languageRouter
-.use(requireAuth)
+  .use(requireAuth)
   .post('/guess', jsonParser, async (req, res, next) => {
     // update word table in db with new score
     // updated linked list according new memory value
@@ -116,19 +109,16 @@ languageRouter
         });
       }
     }
-    console.log(newGuess)
+
     // make Linked List:
     const words = await LanguageService.getList(
       req.app.get('db'), req.user.id,
       req.language.head,
     )
-    console.log(words)
     /// Linked list ⬆⬆     
     let guessedWord = words[0]
 
     let isCorrect = guessedWord.translation === newGuess.guess
-
-    console.log('translation:', guessedWord.translation, 'guessed:', newGuess.guess)
     if (!isCorrect) {
       score = {
         incorrect_count: ++guessedWord.incorrect_count,
@@ -151,17 +141,13 @@ languageRouter
         .catch(next);
     }
 
-    console.log('SCORE:', score)
     LanguageService.updateScore(
       req.app.get('db'),
       guessedWord.id,
       score
     )
-
       .catch(next);
-    //make new list
-    ////remove current head and move
-    //loop over the nodes and update next values
+
 
 
     const newList = await LanguageService.getNewList(
@@ -169,16 +155,6 @@ languageRouter
       req.user.id,
       req.language.head
     )
-
-
-
-    // dbUpdatedList = await LanguageService.updateAllWords( req.app.get('db'),req.language.id)
-    //const newHead = {head : 11}//{head : newList[0].id}
-
-    //let newLang = await LanguageService.updateHead( req.app.get('db'), req.language.id, newHead)
-    //   res.json(dbUpdatedList)
-    console.log('****New Ids Order:', newList)
-    //db('words').update(ll.all())
 
 
     ///****UPDATE NEXT IDS IN DB****////
@@ -196,26 +172,18 @@ languageRouter
       req.language.id,
       newList[0].id,
     )
-
       .catch(next);
 
-    console.log('*new head*:', newHead)
-
-
     if (!isCorrect) {
-      console.log("InCorrect!")
       try {
         const newWords = await LanguageService.getList(
           req.app.get('db'),
           req.user.id,
-          req.language.head,
-        )
-  
+          req.language.head)
         res.status(200).json({
-         
           nextWord: words[1].original,
           totalScore: req.language.total_score,
-          wordCorrectCount:words[1].correct_count,
+          wordCorrectCount: words[1].correct_count,
           wordIncorrectCount: words[1].incorrect_count,
           answer: words[0].translation,
           isCorrect: false
@@ -226,8 +194,6 @@ languageRouter
       }
     } else {
 
-
-      console.log("Correct")
       try {
         const newWords = await LanguageService.getList(
           req.app.get('db'),
@@ -238,7 +204,7 @@ languageRouter
         res.status(200).json({
           nextWord: words[1].original,
           totalScore: newWords[0].total_score,
-          wordCorrectCount:words[1].correct_count,
+          wordCorrectCount: words[1].correct_count,
           wordIncorrectCount: words[1].incorrect_count,
           answer: guessedWord.translation,
           isCorrect: true
@@ -247,10 +213,7 @@ languageRouter
       } catch (error) {
         next(error)
       }
-
     }
-
-
   })
 
 
