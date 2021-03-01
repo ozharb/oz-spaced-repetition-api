@@ -132,6 +132,7 @@ languageRouter
         correct_count: ++guessedWord.correct_count,
         memory_value: (guessedWord.memory_value >= 8) ? 10 : guessedWord.memory_value * 2
       }
+
       LanguageService.updateTotal(
         req.app.get('db'),
         req.language.id,
@@ -141,15 +142,20 @@ languageRouter
         .catch(next);
     }
 
-    LanguageService.updateScore(
-      req.app.get('db'),
-      guessedWord.id,
-      score
-    )
-      .catch(next);
+    try {
+      await LanguageService.updateScore(
+        req.app.get('db'),
+        guessedWord.id,
+        score)
+
+    } catch (error) {
+      next(error)
+    }
 
 
 
+
+try{
     const newList = await LanguageService.getNewList(
       req.app.get('db'),
       req.user.id,
@@ -161,18 +167,25 @@ languageRouter
     newList.forEach(el => {
       LanguageService.updateIds(
         req.app.get('db'), el.id, el)
-
-
         .catch(next);
     })
 
+} catch(error){
+  next(error)
+}
+  
+
     //***Update Head****//
-    const newHead = LanguageService.updateHead(
-      req.app.get('db'),
-      req.language.id,
-      newList[0].id,
-    )
-      .catch(next);
+    try {
+      await LanguageService.updateHead(
+        req.app.get('db'),
+        req.language.id,
+        newList[0].id,
+      )
+    } catch (error) {
+      next(error)
+    }
+
 
     if (!isCorrect) {
       try {
