@@ -155,7 +155,7 @@ languageRouter
 
 
 
-try{
+
     const newList = await LanguageService.getNewList(
       req.app.get('db'),
       req.user.id,
@@ -170,11 +170,6 @@ try{
         .catch(next);
     })
 
-} catch(error){
-  next(error)
-}
-  
-
     //***Update Head****//
     try {
       await LanguageService.updateHead(
@@ -185,6 +180,7 @@ try{
     } catch (error) {
       next(error)
     }
+
 
 
     if (!isCorrect) {
