@@ -142,7 +142,7 @@ class SLL {
         }
         let oldHead = this.head.value
 
-        this.insertAt(num + 2, oldHead)
+        this.insertAt(num + 1, oldHead)
         this.shift()
         return true
 
