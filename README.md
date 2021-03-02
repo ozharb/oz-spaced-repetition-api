@@ -1,5 +1,44 @@
 # Spaced repetition API!
 
+Language learning app that uses the spaced repetition learning technique to help you memorize a foreign language. The app displays 10 words in French, and asks you to recall the corresponding word in English.
+
+This is the backend for `Spaced Repetition App`.  A live version of the app can be found at [https://spaced-repetition-ozharb.vercel.app/]
+
+#### Authentication
+Requires bearer token. You may use the front end client to login and create a token using demo account.
+
+https://spaced-repetition-ozharb.vercel.app/login
+
+* user name: Demo
+* password: Demo@2021
+
+#### CRUD requests
+API supports Get, Post, Delete, and Patch requests.
+
+#### Endpoints
+* `/language ` get all words for user
+* `/language/guess ` post user guess to first word in list
+* `/user` post a new user with credentials
+* `/auth` authenticat user's username and password
+
+
+#### Back End
+
+* Node and Express
+  * Authentication via JWT
+  * RESTful Api
+* Testing
+  * Supertest (integration)
+  * Mocha and Chai (unit)
+* Database
+  * Postgres
+  * Knex.js - SQL wrapper
+
+#### Production
+
+Deployed via Heroku
+
+
 ## Local dev setup
 
 If using user `dunder-mifflin`:
