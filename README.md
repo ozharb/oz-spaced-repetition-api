@@ -2,7 +2,7 @@
 
 Language learning app that uses the spaced repetition learning technique to help you memorize a foreign language. The app displays 10 words in French, and asks you to recall the corresponding word in English.
 
-This is the backend for `Spaced Repetition App`.  A live version of the app can be found at [https://spaced-repetition-ozharb.vercel.app/]
+This is the back end for `Spaced Repetition App`.  A live version of the app can be found at [https://spaced-repetition-ozharb.vercel.app/]
 
 #### Authentication
 Requires bearer token. You may use the front end client to login and create a token using demo account.
