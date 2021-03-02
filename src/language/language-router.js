@@ -6,9 +6,6 @@ const languageRouter = express.Router()
 
 
 
-
-
-
 languageRouter
   .use(requireAuth)
   .use(async (req, res, next) => {
@@ -67,29 +64,6 @@ languageRouter
       next(error)
     }
   })
-  .get('/words', async (req, res, next) => {
-
-    try {
-      const words = await LanguageService.getList(
-        req.app.get('db'),
-        req.user.id,
-        req.language.head
-      )
-      res.json({
-        words
-      })
-      next()
-    } catch (error) {
-      next(error)
-    }
-  })
-//get words
-// insert into linked words in the right order per the next values
-//check guess, update the memory values, in the current head;
-//remove current head and move
-//loop over the nodes and update next values
-//saved linked list back to the database
-//updated total score and head in language table
 
 languageRouter
   .use(requireAuth)
@@ -125,7 +99,6 @@ languageRouter
         memory_value: 1
       }
 
-
     } else {
 
       score = {
@@ -152,16 +125,11 @@ languageRouter
       next(error)
     }
 
-
-
-
-
     const newList = await LanguageService.getNewList(
       req.app.get('db'),
       req.user.id,
       req.language.head
     )
-
 
     ///****UPDATE NEXT IDS IN DB****////
     newList.forEach(el => {
@@ -180,8 +148,6 @@ languageRouter
     } catch (error) {
       next(error)
     }
-
-
 
     if (!isCorrect) {
       try {
